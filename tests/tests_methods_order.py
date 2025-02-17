@@ -4,35 +4,19 @@ import allure
 from api.api_order import OrderAPI
 
 class TestColors:
-    @allure.title('При создании заказа можно указать цвет — BLACK')
-    def test_create_order_with_black_color(self):
+    @allure.title('При создании заказа можно указать цвет(а) или не указывать цвет')
+    @pytest.mark.parametrize("colors", [
+        pytest.param(["BLACK"], id="BLACK color"),
+        pytest.param(["GREY"], id="GREY color"),
+        pytest.param(["BLACK", "GREY"], id="BLACK and GREY colors"),
+        pytest.param([], id="No color")
+    ])
+    def test_create_order_with_colors(self, colors):
         response = OrderAPI.create_order(
-                "John", "Karter", "Красная, 142", "1", "+78007778899", 5, "2025-02-14", "Aloha", ["BLACK"])
-        assert response.status_code == 201
-        assert "track" in response.json()
-
-    @allure.title('При создании заказа можно указать серый цвет')
-    def test_create_order_with_grey_color(self):
-        response = OrderAPI.create_order(
-                "John", "Karter", "Красная, 142", "1", "+78007778899", 5, "2025-02-14", "Aloha", ["GREY"])
-        assert response.status_code == 201
-        assert "track" in response.json()
-
-    @allure.title('При создании заказа можно указать два цвета')
-    def test_create_order_with_two_color(self):
-        response = OrderAPI.create_order(
-            "John", "Karter", "Красная, 142", "1", "+78007778899", 5, "2025-02-14", "Aloha", ["BLACK", "GREY"])
-        assert response.status_code == 201
-        assert "track" in response.json()
-
-    @allure.title('При создании заказа можно не указывать цвет')
-    def test_create_order_without_color(self):
-        response = OrderAPI.create_order(
-            "John", "Karter", "Красная, 142", "1", "+78007778899", 5, "2025-02-14", "Aloha"
+            "John", "Karter", "Красная, 142", "1", "+78007778899", 5, "2025-02-14", "Aloha", colors
         )
         assert response.status_code == 201
         assert "track" in response.json()
-
 
     @allure.title('Тело ответа содержит track')
     def test_get_orders_track(self):
