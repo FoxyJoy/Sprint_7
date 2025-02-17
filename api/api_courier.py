@@ -27,3 +27,8 @@ class CourierAPI:
     @allure.step("Удаление курьера")
     def delete_courier(courier_id):
         return requests.delete(f"{CourierAPI.main_url}/{courier_id}")
+
+
+
+
+

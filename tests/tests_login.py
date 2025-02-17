@@ -12,8 +12,6 @@ class TestLogin:
         assert response.status_code == 200
         assert "id" in response.json()
 
-        # assert len(courier_data) == 3, "Courier registration failed"
-
     @allure.title('Для авторизации нужно передать все обязательные поля')
     def test_login_courier_missing_fild(self):
         response = CourierAPI.login_courier("login_only", "")
